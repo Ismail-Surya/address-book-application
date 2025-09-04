@@ -30,3 +30,8 @@ Thumbs.db
 /backend/.classpath
 /backend/.project
 /backend/.settings/
+
+
+# --- Additional files ---
+*.txt
+*.sql

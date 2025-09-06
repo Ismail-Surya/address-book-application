@@ -17,6 +17,11 @@ public class ContactDaoImpl implements ContactDao {
 //	@Autowired
 	private EntityManager entityManager;
 	
+	public Contact save (Contact contact) {
+		entityManager.persist(contact);
+		return contact;
+	}
+	
 	@Override
 	public List<Contact> findAll() {
 		return entityManager.createQuery("SELECT c FROM Contact c", Contact.class).getResultList();

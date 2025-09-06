@@ -31,7 +31,7 @@ export default function App() {
   return (
     <div>
       <h1 className={classes.header}>Address Book</h1>
-      {loading && <p>Loading contacts ...</p>}
+      {loading && <p className = {classes.loading}>Loading contacts ...</p>}
       {error && <p className = {classes.error}>❌ {error}</p>}
       {!loading && !error && <Table contacts={contacts} />}
     </div>

@@ -1,0 +1,11 @@
+# Ensure consistent line endings across OS
+* text=auto
+
+# Explicitly handle common source files
+*.js    text
+*.jsx   text
+*.css   text
+*.html  text
+*.json  text
+*.md    text
+*.properties text

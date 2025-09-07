@@ -21,7 +21,6 @@ export function ContactsProvider({ children }) {
       }
       const fetchedContacts = await response.json();
       setContacts(fetchedContacts);
-      console.log(fetchedContacts)
     } catch (err) {
       setError(err.message);
     } finally {

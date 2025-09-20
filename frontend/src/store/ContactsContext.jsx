@@ -28,8 +28,12 @@ export function ContactsProvider({ children }) {
     }
   }
 
+  const refreshContacts = async () => {
+    await fetchContacts();
+  }
+
   return (
-    <ContactsContext.Provider value={{ contacts, setContacts, loading, error }}>
+    <ContactsContext.Provider value={{ contacts, setContacts, loading, error, refreshContacts }}>
       {children}
     </ContactsContext.Provider>
   );

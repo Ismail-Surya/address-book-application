@@ -1,25 +1,35 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Modal from "./Modal";
-import classes from "./AddContactModal.module.css";
+import classes from "./UpsertContactModal.module.css";
 import { ContactsContext } from "../../store/ContactsContext";
 
-export default function AddContactModal({ isOpen, onClose }) {
+export default function UpsertContactModal({ isOpen, onClose, contact }) {
   const { refreshContacts } = useContext(ContactsContext);
 
-    const initialFormData = {
-  firstName: "",
-  lastName: "",
-  phoneNumber: "",
-  email: "",
-  streetAddress: "",
-  city: "",
-  state: "",
-  postalCode: "",
-  country: "",
-  notes: "",
-};
+  const initialFormData = {
+    firstName: "",
+    lastName: "",
+    phoneNumber: "",
+    email: "",
+    streetAddress: "",
+    city: "",
+    state: "",
+    postalCode: "",
+    country: "",
+    notes: "",
+  };
+
+  const excludedFields = ["id", "createdAt", "updatedAt"];
 
   const [formData, setFormData] = useState(initialFormData);
+
+  useEffect(() => {
+    if (contact) {
+      setFormData(contact);
+    } else {
+      setFormData(initialFormData);
+    }
+  }, [contact, isOpen]);
 
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -28,13 +38,16 @@ export default function AddContactModal({ isOpen, onClose }) {
   const handleClose = () => {
     setFormData(initialFormData);
     onClose();
-  }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:8484/contacts", {
-        method: "POST",
+      const method = contact ? "PUT" : "POST";
+      // const url = contact ? `http://localhost:8484/contacts/${contact.id}` : 'http://localhost:8484/contacts';
+      const url = `http://localhost:8484/contacts`;
+      const response = await fetch(url, {
+        method,
         body: JSON.stringify(formData),
         headers: {
           "content-type": "application/json",
@@ -42,7 +55,7 @@ export default function AddContactModal({ isOpen, onClose }) {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to add contact");
+        throw new Error(contact ? "Failed to update contact" : "Failed to add contact");
       }
 
       await refreshContacts();
@@ -57,14 +70,14 @@ export default function AddContactModal({ isOpen, onClose }) {
 
   return (
     <Modal isOpen={isOpen} onClose={handleClose}>
-      <h2>Add New Contact</h2>
+      <h2>{contact ? "Edit Contact" : "Add New Contact"}</h2>
       <form onSubmit={handleSubmit} className={classes.form}>
-        {Object.keys(formData).map((field) => (
+        {Object.keys(formData).filter((field) => !excludedFields.includes(field)).map((field) => (
           <input
             key={field}
             type="text"
             name={field}
-            placeholder={field}
+            placeholder={field.replace(/([A-Z])/g, " $1").replace(/^./, str => str.toUpperCase())}
             value={formData[field]}
             onChange={handleChange}
             required={field === "firstName" || field === "lastName"}
@@ -72,7 +85,7 @@ export default function AddContactModal({ isOpen, onClose }) {
         ))}
 
         <div className={classes.modalButtons}>
-          <button type="submit">Submit</button>
+          <button type="submit">{contact ? "Update" : "Submit"}</button>
           <button type="button" onClick={handleClose}>
             Cancel
           </button>

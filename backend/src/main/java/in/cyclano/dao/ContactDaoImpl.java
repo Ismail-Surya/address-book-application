@@ -27,4 +27,10 @@ public class ContactDaoImpl implements ContactDao {
 		return entityManager.createQuery("SELECT c FROM Contact c", Contact.class).getResultList();
 	}
 
+	@Override
+	public Contact update(Contact contact) {
+		// TODO Auto-generated method stub
+		return entityManager.merge(contact);
+	}
+
 }

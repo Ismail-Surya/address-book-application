@@ -23,5 +23,9 @@ public class ContactService {
 	public List <Contact> listAll () {
 		return contactDao.findAll();
 	}
+
+	public Contact updateContact(Contact contact) {
+		return contactDao.update(contact);
+	}
 	
 }

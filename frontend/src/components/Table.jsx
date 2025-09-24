@@ -2,7 +2,7 @@ import { useContext } from "react";
 import classes from "./Table.module.css";
 import { ContactsContext } from "../store/ContactsContext";
 
-export default function Table() {
+export default function Table({ onEditContact }) {
   const { contacts, loading, error } = useContext(ContactsContext);
 
   if (loading) return <p className={classes.loading}>Loading contacts ...</p>;
@@ -25,7 +25,7 @@ export default function Table() {
     <tbody>
       {contacts.map((contact) => {
         return (
-          <tr key={contact.id}>
+          <tr key={contact.id} className = { classes.clickableRow } onClick = { () => onEditContact(contact) }>
             <td>
               {contact.firstName} {contact.lastName}
             </td>

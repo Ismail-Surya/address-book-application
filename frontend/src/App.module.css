@@ -23,3 +23,30 @@
 .addButton:active {
     background-color: #343a40;
 }
+
+.deleteButton {
+
+    display: block;
+    margin: 1rem auto;
+    padding: 0.75rem 1rem;
+    font-size: 1.1rem;
+    border-radius: 0.25rem;
+    border:none;
+    cursor: pointer;
+    background-color: #dc3545;
+    color: white;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.deleteButton:hover {
+    background-color: #c82333;
+}
+
+.deleteButton:disabled {
+    background-color: #e6a2aa;
+    cursor: not-allowed;
+}
+
+.deleteButton:active {
+    background-color: #a71d2a;
+}

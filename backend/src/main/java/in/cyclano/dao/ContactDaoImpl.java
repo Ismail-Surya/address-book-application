@@ -33,4 +33,10 @@ public class ContactDaoImpl implements ContactDao {
 		return entityManager.merge(contact);
 	}
 
+	@Override
+	public void deleteById(Integer id) {
+		Contact c = entityManager.find(Contact.class, id);
+		if (c != null) entityManager.remove(c);
+	}
+
 }

@@ -3,11 +3,12 @@ import classes from "./Table.module.css";
 import { ContactsContext } from "../store/ContactsContext";
 
 export default function Table({
+  contacts,
   onEditContact,
   selectedContactId,
   handleSelectContact,
 }) {
-  const { contacts, loading, error } = useContext(ContactsContext);
+  const { loading, error } = useContext(ContactsContext);
 
   if (loading) return <p className={classes.loading}>Loading contacts ...</p>;
 

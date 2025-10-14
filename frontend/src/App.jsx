@@ -12,7 +12,16 @@ export default function App() {
   const [selectedContactId, setSelectedContactId] = useState(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-  const { refreshContacts } = useContext(ContactsContext);
+  const { contacts, refreshContacts } = useContext(ContactsContext);
+
+  const [ currentPage, setCurrentPage ] = useState(0);
+  const pageSize = 5;
+
+  const startIndex = currentPage * pageSize;
+  const endIndex = startIndex + pageSize;
+  const visibleContacts = contacts.slice(startIndex, endIndex);
+
+  const totalPages = Math.ceil(contacts.length / pageSize);
 
   function handleSelectContact(id) {
     setSelectedContactId((prev) => (prev === id ? null : id));
@@ -26,6 +35,14 @@ export default function App() {
   function handleEditContact(contact) {
     setSelectedContact(contact);
     setIsModalOpen(true);
+  }
+
+  function handleNextPage () {
+    setCurrentPage((prev) => Math.min(prev + 1, totalPages - 1));
+  }
+
+  function handlePrevPage () {
+    setCurrentPage((prev) => Math.max(prev - 1, 0));
   }
 
   async function handleDeleteContact() {
@@ -65,11 +82,31 @@ export default function App() {
           onClose={() => setIsDeleteModalOpen(false)}
           onConfirm = {handleDeleteContact}
         />
+
+        {
+          contacts.length > pageSize && (
+            <div className = { classes.pagination }>
+              <button onClick = {handlePrevPage} disabled = {currentPage === 0}>
+                &lt; Prev
+              </button>
+              <span>
+                Page { currentPage + 1 } of { totalPages }
+              </span>
+              <button onClick = {handleNextPage} disabled = {currentPage >= totalPages - 1}>
+                Next &gt;
+              </button>
+            </div>
+          )
+        }
+
+        
         <Table
+          contacts = { visibleContacts }
           handleSelectContact={handleSelectContact}
           selectedContactId={selectedContactId}
           onEditContact={handleEditContact}
         />
+
       </div>
   );
 }
